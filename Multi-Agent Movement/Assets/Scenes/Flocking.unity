@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boid: {fileID: 1632203978045900, guid: da1a6e41b3ab0d448a769c775497d5d5, type: 2}
-  numBoids: 32
+  numBoids: 20
 --- !u!4 &21861303
 Transform:
   m_ObjectHideFlags: 0
