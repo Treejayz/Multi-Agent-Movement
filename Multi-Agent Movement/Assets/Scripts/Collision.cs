@@ -54,9 +54,7 @@ public class Collision : MonoBehaviour {
         whisker_2.Normalize();
         whisker_2 *= whiskerLookAhead;
 
-        //Debug.DrawRay(character.staticInfo.position, whisker_1);
-        //Debug.DrawRay(character.staticInfo.position, whisker_2);
-        Debug.DrawRay(character.staticInfo.position, rayVector);
+        
         Vector2 newTarget = currentTarget;
         RaycastHit2D hit; 
         if(hit = Physics2D.Raycast(character.staticInfo.position, rayVector))
@@ -72,25 +70,25 @@ public class Collision : MonoBehaviour {
         }
       
 
-        if(hit = Physics2D.Raycast(character.staticInfo.position, whisker_1))
+        else if(hit = Physics2D.Raycast(character.staticInfo.position, whisker_1))
         {
             if(hit.transform != this.transform)
             {
                 if(hit.distance <= whiskerLookAhead)
                 {
-                    newTarget += hit.point + hit.normal * avoidDistance;
+                    newTarget = hit.point + hit.normal * avoidDistance;
                 }
                 
             }
         }
 
-        if (hit = Physics2D.Raycast(character.staticInfo.position, whisker_2))
+        else if (hit = Physics2D.Raycast(character.staticInfo.position, whisker_2))
         {
             if (hit.transform != this.transform)
             {
                 if (hit.distance <= whiskerLookAhead)
                 {
-                    newTarget += hit.point + hit.normal * avoidDistance;
+                    newTarget = hit.point + hit.normal * avoidDistance;
                 }
             }
         }

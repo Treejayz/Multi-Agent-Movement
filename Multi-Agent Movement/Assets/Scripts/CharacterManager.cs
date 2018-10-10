@@ -15,16 +15,21 @@ public class CharacterManager : MonoBehaviour {
     public Vector2 linear;
     public float lookAhead;
     public float avoidDistance;
+    private PathManager path;
 
     private GameObject debug;
 
-    private void Start()
+
+    // Update is called once per frame
+    public void setUp(GameObject _target)
     {
+        target = _target;
+        path = GameObject.Find("PathManager").GetComponent<PathManager>();
         debug = Instantiate(target);
         kinematics = this.GetComponent<Kinematics>();
         kinematics.character = this.gameObject;
         kinematics.maxSpeed = maxSpeed;
-        kinematics.target = target.transform.position;
+        kinematics.target = _target.transform.position;
 
         character = this.GetComponent<Character>();
         character.r = rotation;
@@ -37,7 +42,11 @@ public class CharacterManager : MonoBehaviour {
         collision.avoidDistance = avoidDistance;
         collision.whiskerLookAhead = lookAhead / 2;
     }
-    // Update is called once per frame
+    public void setTarget(GameObject _target)
+    {
+        target = _target;
+        kinematics.target = _target.transform.position;
+    }
     void Update ()
     {
 
@@ -54,6 +63,7 @@ public class CharacterManager : MonoBehaviour {
         this.transform.rotation = Quaternion.Euler(0, 0, character.staticInfo.orientation * Mathf.Rad2Deg);
 
         if((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target.transform.position; }
+        if((character.staticInfo.position - target.transform.position).magnitude < .2) { path.updatePoint(); }
         
     }
 }
