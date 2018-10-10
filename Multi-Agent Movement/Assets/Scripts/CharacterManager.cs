@@ -8,6 +8,7 @@ public class CharacterManager : MonoBehaviour {
     private Character character;
     private Kinematics kinematics;
     private Collision collision;
+    public Canvas canvas;
     public GameObject target;
     public float rotation;
     public float maxSpeed;
@@ -16,6 +17,7 @@ public class CharacterManager : MonoBehaviour {
     public float lookAhead;
     public float avoidDistance;
     private PathManager path;
+    public bool end = false;
 
     private GameObject debug;
 
@@ -23,9 +25,10 @@ public class CharacterManager : MonoBehaviour {
     // Update is called once per frame
     public void setUp(GameObject _target)
     {
+        canvas.enabled = false;
         target = _target;
         path = GameObject.Find("PathManager").GetComponent<PathManager>();
-        debug = Instantiate(target);
+        //debug = Instantiate(target);
         kinematics = this.GetComponent<Kinematics>();
         kinematics.character = this.gameObject;
         kinematics.maxSpeed = maxSpeed;
@@ -49,10 +52,23 @@ public class CharacterManager : MonoBehaviour {
     }
     void Update ()
     {
-
-        Vector3 newTarget = collision.collisionTarget(kinematics.target);
+        if (!end)
+        {
+            updateMananger();
+        }
+        else
+        {
+            canvas.enabled = true;
+        }
         
-        debug.transform.position = newTarget;
+        
+    }
+
+    void updateMananger()
+    {
+        Vector3 newTarget = collision.collisionTarget(kinematics.target);
+
+        //debug.transform.position = newTarget;
         kinematics.target = newTarget;
         Kinematics.KinematicSteeringOutput steering = kinematics.Seek();
 
@@ -62,8 +78,7 @@ public class CharacterManager : MonoBehaviour {
         this.transform.position = character.staticInfo.position;
         this.transform.rotation = Quaternion.Euler(0, 0, character.staticInfo.orientation * Mathf.Rad2Deg);
 
-        if((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target.transform.position; }
-        if((character.staticInfo.position - target.transform.position).magnitude < .2) { path.updatePoint(); }
-        
+        if ((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target.transform.position; }
+        if ((character.staticInfo.position - target.transform.position).magnitude < .2) { path.updatePoint(); }
     }
 }

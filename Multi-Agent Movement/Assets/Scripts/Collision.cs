@@ -8,6 +8,9 @@ public class Collision : MonoBehaviour {
     public float lookAhead;
     public float whiskerLookAhead;
     public Character character;
+    public GameObject rayDraw;
+    public GameObject whisker_1Draw;
+    public GameObject whisker_2Draw;
 
 
     public struct CollisionData
@@ -54,7 +57,12 @@ public class Collision : MonoBehaviour {
         whisker_2.Normalize();
         whisker_2 *= whiskerLookAhead;
 
-        
+        whisker_1Draw.GetComponent<DrawRay>().updatePoints(character.staticInfo.position, character.staticInfo.position + whisker_1);
+        whisker_2Draw.GetComponent<DrawRay>().updatePoints(character.staticInfo.position, character.staticInfo.position + whisker_2);
+        rayDraw.GetComponent<DrawRay>().updatePoints(character.staticInfo.position, character.staticInfo.position + rayVector);
+
+
+
         Vector2 newTarget = currentTarget;
         RaycastHit2D hit; 
         if(hit = Physics2D.Raycast(character.staticInfo.position, rayVector))

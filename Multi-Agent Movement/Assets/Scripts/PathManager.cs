@@ -12,6 +12,7 @@ public class PathManager : MonoBehaviour {
     private void Start()
     {
         character.GetComponent<CharacterManager>().setUp(points[index]);
+        
     }
     public void updatePoint()
     {
@@ -20,9 +21,13 @@ public class PathManager : MonoBehaviour {
         if(index == points.Length)
         {
             //done
-            Debug.Log("done");
+            character.GetComponent<CharacterManager>().end = true;
         }
-        character.GetComponent<CharacterManager>().setTarget(points[index]);
+        else
+        {
+            character.GetComponent<CharacterManager>().setTarget(points[index]);
+        }
+        
 
     }
 }
