@@ -77,7 +77,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 1.5
 --- !u!114 &114875628400094206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,9 +91,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 3
   maxAcceleration: 9
-  cohesionForce: 0.8
-  separationForce: 1.4
-  alignForce: 1
+  cohesionForce: 1
+  separationForce: 5
+  alignForce: 1.5
 --- !u!212 &212409346204977322
 SpriteRenderer:
   m_ObjectHideFlags: 1

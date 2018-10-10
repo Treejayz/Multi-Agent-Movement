@@ -49,8 +49,10 @@ public class Flocking : MonoBehaviour {
         foreach(GameObject other in others)
         {
             // The force is away from the other, and increases when closer to this
-            direction = (Vector2)other.transform.position - (Vector2)transform.position;
+            direction = (Vector2)transform.position - (Vector2)other.transform.position;
             proximity = (GetComponent<CircleCollider2D>().radius - direction.magnitude) / GetComponent<CircleCollider2D>().radius;
+            proximity = Mathf.Clamp01(proximity);
+            proximity = proximity * proximity;
             repulsion += direction.normalized * proximity * separationForce;
         }
 
