@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Flocking.unity
+    guid: accd76dec3bb1e44894439acab8abbf6
+  - enabled: 1
+    path: Assets/Scenes/Flocking&Avoidance.unity
+    guid: 968523e1ec3507149a97944a37e2a53c
+  - enabled: 1
     path: Assets/Scenes/obstacleCourse.unity
     guid: 16d56902e54955049bef65b8d9309ab3
   m_configObjects: {}

@@ -48,6 +48,8 @@ public class AvoidanceManager : MonoBehaviour {
             temp.transform.GetChild(0).tag = "Boid2";
             group2[i] = temp;
         }
+
+        toggleCone();
     }
 
     // Update is called once per frame
@@ -110,6 +112,16 @@ public class AvoidanceManager : MonoBehaviour {
         {
             group1[i].GetComponent<FlockingAvoidance>().coneCheck = coneCheck;
             group2[i].GetComponent<FlockingAvoidance>().coneCheck = coneCheck;
+        }
+        toggleCone();
+    }
+
+    public void toggleCone()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            group1[i].transform.GetChild(1).gameObject.SetActive(coneCheck);
+            group2[i].transform.GetChild(1).gameObject.SetActive(coneCheck);
         }
     }
 

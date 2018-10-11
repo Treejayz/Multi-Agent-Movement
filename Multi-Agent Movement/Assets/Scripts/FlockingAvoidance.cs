@@ -117,6 +117,9 @@ public class FlockingAvoidance : MonoBehaviour {
                 float minSep = relativePos.magnitude - (relativeVel.magnitude * t);
                 if (t > 0 && t < shortestTime && minSep < .2f)
                 {
+                    Vector2 targetPos = (Vector2)transform.position + velocity * t;
+                    transform.GetChild(2).gameObject.SetActive(true);
+                    transform.GetChild(2).position = (Vector3)targetPos;
                     shortestTime = t;
                     if (minSep <= 0 || relativePos.magnitude < .2f)
                     {
@@ -124,13 +127,18 @@ public class FlockingAvoidance : MonoBehaviour {
                     }
                     else
                     {
-                        Vector2 targetPos = (Vector2)transform.position + velocity * t;
+                        
                         direction = (Vector2)transform.position - targetPos;
 
                         collisionAvoidance = direction.normalized;
                     }
                 }
             }
+        }
+
+        if (collisionAvoidance == Vector2.zero)
+        {
+            transform.GetChild(2).gameObject.SetActive(false);
         }
 
         // If both avoidances are checked, we should average the two (otherwise they dont move
