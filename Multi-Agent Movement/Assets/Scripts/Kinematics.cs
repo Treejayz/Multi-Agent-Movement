@@ -25,7 +25,7 @@ public class Kinematics : MonoBehaviour {
     {
         if(velocity.magnitude > 0)
         {
-            return Mathf.Atan2(-velocity.x, velocity.z);
+            return Mathf.Atan2(-velocity.x, velocity.y);
         }
         else
         {

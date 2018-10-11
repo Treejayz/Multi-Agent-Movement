@@ -12,6 +12,7 @@ public class PathManager : MonoBehaviour {
     private void Start()
     {
         character.GetComponent<CharacterManager>().setUp(points[index]);
+  
         
     }
     public void updatePoint()

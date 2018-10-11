@@ -16,6 +16,7 @@ public class CharacterManager : MonoBehaviour {
     public Vector2 linear;
     public float lookAhead;
     public float avoidDistance;
+    
     private PathManager path;
     public bool end = false;
 
@@ -33,6 +34,7 @@ public class CharacterManager : MonoBehaviour {
         kinematics.character = this.gameObject;
         kinematics.maxSpeed = maxSpeed;
         kinematics.target = _target.transform.position;
+        
 
         character = this.GetComponent<Character>();
         character.r = rotation;
