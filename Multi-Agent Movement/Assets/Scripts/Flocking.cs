@@ -28,7 +28,11 @@ public class Flocking : MonoBehaviour {
 	void FixedUpdate () {
 
         // First we just translate based on our velocity
-        transform.Translate(velocity * Time.fixedDeltaTime);
+        transform.position += (Vector3)velocity * Time.fixedDeltaTime;
+
+        // Set the rotation
+        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.forward), .05f);
 
         // Add our acceleration
         velocity += acceleration * Time.fixedDeltaTime;

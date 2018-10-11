@@ -24,6 +24,7 @@ public class FlockControl : MonoBehaviour {
 	void Start () {
         cam = Camera.main;
 
+        //spawn some boids
         boids = new GameObject[numBoids];
         for (int i = 0; i < numBoids; i++)
         {
@@ -34,12 +35,14 @@ public class FlockControl : MonoBehaviour {
             boids[i] = temp;
         }
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
+    // Update is called once per frame
+    void Update()
+    {
+
+        // calculate the center and direction towards the mouse
         Vector2 sum = Vector2.zero;
-		foreach (GameObject boid in boids)
+        foreach (GameObject boid in boids)
         {
             sum += (Vector2)boid.transform.position;
         }
@@ -48,5 +51,11 @@ public class FlockControl : MonoBehaviour {
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         target = mousePos - center;
 
-	}
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        if (horizontal != 0 || vertical != 0)
+        {
+            target = new Vector2(horizontal, vertical);
+        }
+    }
 }

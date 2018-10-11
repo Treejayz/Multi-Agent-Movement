@@ -22,9 +22,9 @@ public class FlockingAvoidance : MonoBehaviour {
     public float coneRange = 2f;
     [Range(0, 60)]
     public float coneAngle = 30f;
-    public float coneForce;
+
     public bool collisionPrediction = true;
-    public float predictionForce;
+    public float avoidanceForce;
 
 
     [HideInInspector]
@@ -49,7 +49,11 @@ public class FlockingAvoidance : MonoBehaviour {
 	void FixedUpdate () {
 
         // First we just translate based on our velocity
-        transform.Translate(velocity * Time.fixedDeltaTime);
+        transform.position += (Vector3)velocity * Time.fixedDeltaTime;
+
+        // Set the rotation
+        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.forward), .05f);
 
         // Add our acceleration
         velocity += acceleration * Time.fixedDeltaTime;
@@ -85,55 +89,64 @@ public class FlockingAvoidance : MonoBehaviour {
         Vector2 coneAvoidance = Vector2.zero;
         if (coneCheck)
         {
-            int numObstacles = 0;
+            float closest = coneRange;
             foreach (GameObject obstacle in obstacles)
             {
                 direction = (Vector2)transform.position - (Vector2)obstacle.transform.position;
                 // check if the obstacle is in the cone
-                if (direction.magnitude < coneRange && Vector2.Angle(velocity.normalized, direction.normalized * -1) < coneAngle)
+                if (direction.magnitude < coneRange && direction.magnitude < closest && Vector2.Angle(velocity.normalized, direction.normalized * -1) < coneAngle)
                 {
-                    coneAvoidance += direction.normalized * Mathf.Pow(((coneRange - direction.magnitude) / coneRange), 2);
-                    numObstacles += 1;
+                    coneAvoidance = direction.normalized * Mathf.Pow(((coneRange - direction.magnitude) / coneRange), 2);
+                    closest = direction.magnitude;
                 }
             }
-            if (numObstacles > 1)
-            {
-                coneAvoidance /= numObstacles;
-            }
-            coneAvoidance *= coneForce;
         }
 
         // Now we do some collision prediction
         Vector2 collisionAvoidance = Vector2.zero;
         if (collisionPrediction)
         {
-            int numObstacles = 0;
+            // Only use the one that we will collide with the soonest
+            float shortestTime = 1;
+
+            // Check all obstacles inside our triggered area
             foreach (GameObject obstacle in obstacles) {
                 Vector2 relativePos = obstacle.transform.position - transform.position;
                 Vector2 relativeVel = obstacle.transform.GetComponentInParent<FlockingAvoidance>().velocity - velocity;
                 float t = -1 * ((Vector2.Dot(relativePos, relativeVel)) / Mathf.Pow(relativeVel.magnitude, 2));
-                if (t > 0)
+                float minSep = relativePos.magnitude - (relativeVel.magnitude * t);
+                if (t > 0 && t < shortestTime && minSep < .2f)
                 {
-                    Vector2 targetPos = (Vector2)transform.position + velocity * t;
-                    direction = (Vector2)transform.position - targetPos;
-                    if (direction.magnitude < coneRange && Vector2.Angle(velocity.normalized, direction.normalized * -1) < coneAngle)
+                    shortestTime = t;
+                    if (minSep <= 0 || relativePos.magnitude < .2f)
                     {
-                        coneAvoidance += direction.normalized * Mathf.Pow(((coneRange - direction.magnitude) / coneRange), 2);
-                        numObstacles += 1;
+                        collisionAvoidance = relativePos.normalized * -1;
+                    }
+                    else
+                    {
+                        Vector2 targetPos = (Vector2)transform.position + velocity * t;
+                        direction = (Vector2)transform.position - targetPos;
+
+                        collisionAvoidance = direction.normalized;
                     }
                 }
             }
-            if (numObstacles > 1)
-            {
-                collisionAvoidance /= numObstacles;
-            }
-            collisionAvoidance *= predictionForce;
         }
 
-        //Finally we get the direction we should be heading based on the flock and the mouse position
+        // If both avoidances are checked, we should average the two (otherwise they dont move
+        Vector2 avoidance = collisionAvoidance + coneAvoidance;
+        if (coneCheck && collisionPrediction)
+        {
+            avoidance /= 2f;
+        }
+        avoidance *= avoidanceForce;
+        
+
+        //Finally we get the direction we should be heading
         Vector2 align = manager.Direction(group) * alignForce;
 
-        acceleration = cohesion + repulsion + align + coneAvoidance + collisionAvoidance;
+        // Sum up and clamp the accelerations
+        acceleration = cohesion + repulsion + align + avoidance;
         if (acceleration.magnitude > maxAcceleration)
         {
             acceleration = acceleration.normalized * maxAcceleration;
@@ -145,6 +158,9 @@ public class FlockingAvoidance : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // When something enters the trigger, check if it's in our flock or not
+        // Friendlies are for separation, and others are for avoidance.
+
         if (string.Compare(collision.tag, group) == 0)
         {
             others.Add(collision.gameObject);
@@ -157,6 +173,8 @@ public class FlockingAvoidance : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        // Remove from the correct list
+
         if (string.Compare(collision.tag, group) == 0)
         {
             others.Remove(collision.gameObject);
