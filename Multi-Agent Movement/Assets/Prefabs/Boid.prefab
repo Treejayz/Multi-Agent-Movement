@@ -136,9 +136,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVelocity: 3
   maxAcceleration: 9
-  cohesionForce: 1
+  cohesionForce: 1.5
   separationForce: 3
-  alignForce: 1.5
+  alignForce: 1
 --- !u!212 &212409346204977322
 SpriteRenderer:
   m_ObjectHideFlags: 1
