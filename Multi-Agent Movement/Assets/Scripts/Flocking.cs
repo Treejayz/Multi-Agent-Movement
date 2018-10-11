@@ -71,11 +71,17 @@ public class Flocking : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        others.Add(collision.gameObject);
+        if (string.Compare(collision.tag, "Boid1") == 0)
+        {
+            others.Add(collision.gameObject);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        others.Remove(collision.gameObject);
+        if (string.Compare(collision.tag, "Boid1") == 0)
+        {
+            others.Remove(collision.gameObject);
+        }
     }
 }
