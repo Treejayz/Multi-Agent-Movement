@@ -72,6 +72,7 @@ public class Collision : MonoBehaviour {
                 if(hit.distance <= lookAhead)
                 {
                     newTarget = hit.point + hit.normal * avoidDistance;
+                    gameObject.GetComponent<CharacterManager>().collisionDetected = true;
                 }
                 
             }
@@ -85,6 +86,7 @@ public class Collision : MonoBehaviour {
                 if(hit.distance <= whiskerLookAhead)
                 {
                     newTarget = hit.point + hit.normal * avoidDistance;
+                    gameObject.GetComponent<CharacterManager>().collisionDetected = true;
                 }
                 
             }
@@ -97,6 +99,7 @@ public class Collision : MonoBehaviour {
                 if (hit.distance <= whiskerLookAhead)
                 {
                     newTarget = hit.point + hit.normal * avoidDistance;
+                    gameObject.GetComponent<CharacterManager>().collisionDetected = true;
                 }
             }
         }

@@ -11,7 +11,7 @@ public class PathManager : MonoBehaviour {
 
     private void Start()
     {
-        character.GetComponent<CharacterManager>().setUp(points[index]);
+        character.GetComponent<CharacterManager>().setUp(points[index].transform.position);
   
         
     }
@@ -26,7 +26,7 @@ public class PathManager : MonoBehaviour {
         }
         else
         {
-            character.GetComponent<CharacterManager>().setTarget(points[index]);
+            character.GetComponent<CharacterManager>().setTarget(points[index].transform.position);
         }
         
 

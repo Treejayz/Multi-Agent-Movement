@@ -6,16 +6,19 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour {
 
     private Character character;
-    private Kinematics kinematics;
+    public Kinematics kinematics;
     private Collision collision;
     public Canvas canvas;
-    public GameObject target;
+    public Vector3 target;
     public float rotation;
     public float maxSpeed;
     public float angular;
     public Vector2 linear;
     public float lookAhead;
     public float avoidDistance;
+    public bool leader;
+    public bool collisionDetected = false;
+    public bool pause = false;
     
     private PathManager path;
     public bool end = false;
@@ -24,16 +27,19 @@ public class CharacterManager : MonoBehaviour {
 
 
     // Update is called once per frame
-    public void setUp(GameObject _target)
+    public void setUp(Vector3 _target)
     {
         canvas.enabled = false;
         target = _target;
-        path = GameObject.Find("PathManager").GetComponent<PathManager>();
+        if (leader)
+        {
+            path = GameObject.Find("PathManager").GetComponent<PathManager>();
+        }    
         //debug = Instantiate(target);
         kinematics = this.GetComponent<Kinematics>();
         kinematics.character = this.gameObject;
         kinematics.maxSpeed = maxSpeed;
-        kinematics.target = _target.transform.position;
+        kinematics.target = _target;
         
 
         character = this.GetComponent<Character>();
@@ -47,16 +53,19 @@ public class CharacterManager : MonoBehaviour {
         collision.avoidDistance = avoidDistance;
         collision.whiskerLookAhead = lookAhead / 2;
     }
-    public void setTarget(GameObject _target)
+    public void setTarget(Vector3 _target)
     {
         target = _target;
-        kinematics.target = _target.transform.position;
+        kinematics.target = _target;
     }
     void Update ()
     {
         if (!end)
         {
-            updateMananger();
+            if (!pause)
+            {
+                updateMananger();
+            }
         }
         else
         {
@@ -80,7 +89,8 @@ public class CharacterManager : MonoBehaviour {
         this.transform.position = character.staticInfo.position;
         this.transform.rotation = Quaternion.Euler(0, 0, character.staticInfo.orientation * Mathf.Rad2Deg);
 
-        if ((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target.transform.position; }
-        if ((character.staticInfo.position - target.transform.position).magnitude < .2) { path.updatePoint(); }
+        
+        if ((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target; }
+        if ((character.staticInfo.position - target).magnitude < .2 && leader) { path.updatePoint(); }
     }
 }
