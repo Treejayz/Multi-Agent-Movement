@@ -10,6 +10,7 @@ public class CharacterManager : MonoBehaviour {
     private Collision collision;
     public Canvas canvas;
     public Vector3 target;
+    public string mode;
     public float rotation;
     public float maxSpeed;
     public float angular;
@@ -81,8 +82,14 @@ public class CharacterManager : MonoBehaviour {
 
         //debug.transform.position = newTarget;
         kinematics.target = newTarget;
+        
+  
         Kinematics.KinematicSteeringOutput steering = kinematics.Seek();
-
+        /*if (mode == "arrive")
+        {
+            steering = kinematics.Arrive();
+        }
+        */
         character.staticInfo.velocity = steering.velocity;
         character.updateSteering(Time.deltaTime);
 
@@ -90,7 +97,7 @@ public class CharacterManager : MonoBehaviour {
         this.transform.rotation = Quaternion.Euler(0, 0, character.staticInfo.orientation * Mathf.Rad2Deg);
 
         
-        if ((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target; }
+        if ((character.staticInfo.position - kinematics.target).magnitude < .3) { kinematics.target = target; }
         if ((character.staticInfo.position - target).magnitude < .2 && leader) { path.updatePoint(); }
     }
 

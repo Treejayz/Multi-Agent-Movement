@@ -15,6 +15,7 @@ public class ScalableFormationManager : MonoBehaviour {
     public GameObject wideTunnel;
     public GameObject pastWideTunnel;
     public GameObject destructBoid;
+    public GameObject trianglePoint;
     private bool once = false;
     private float maxSpeed;
     private int tunnelIndex = 0;
@@ -68,7 +69,7 @@ public class ScalableFormationManager : MonoBehaviour {
                 
 
             }
-            else { allArrivedFirst = true; tunnelIndex = 0; }
+            else { allArrivedFirst = true; tunnelIndex = 0; leader.GetComponent<CharacterManager>().pause = false; }
             
         }
         else if(leader.GetComponent<CharacterManager>().target == wideTunnel.transform.position)
@@ -165,6 +166,7 @@ public class ScalableFormationManager : MonoBehaviour {
             else
             {
                 allArrivedSecond = true;
+                leader.GetComponent<CharacterManager>().pause = false;
             }
         }
         
@@ -183,7 +185,7 @@ public class ScalableFormationManager : MonoBehaviour {
 
             
 
-        if (maxDist > formation.radius * 2.1f && allArrivedFirst && allArrivedSecond)
+        if (maxDist > formation.radius * 3f && allArrivedFirst && allArrivedSecond)
         {
             leader.GetComponent<Kinematics>().maxSpeed *= .2f;
         }
@@ -196,37 +198,26 @@ public class ScalableFormationManager : MonoBehaviour {
         if (leader.GetComponent<CharacterManager>().target == pastTunnel.transform.position && !allArrivedFirst)
         {
             leader.GetComponent<CharacterManager>().pause = true;
+            
         }
-        else { leader.GetComponent<CharacterManager>().pause = false; }
+   
         if (leader.GetComponent<CharacterManager>().target == pastWideTunnel.transform.position && !allArrivedSecond)
         {
             leader.GetComponent<CharacterManager>().pause = true;
         }
-        else { leader.GetComponent<CharacterManager>().pause = false; }
 
-        if (leader.GetComponent<CharacterManager>().collisionDetected)
+
+       if (leader.GetComponent<CharacterManager>().target == trianglePoint.transform.position && !once && leader.GetComponent<CharacterManager>().collisionDetected)
         {
             
-                if (roomForFormation() && !once)
-                {
-                    leader.GetComponent<CharacterManager>().kinematics.target *= formation.radius;
-                    leader.GetComponent<CharacterManager>().collisionDetected = false;
-                    once = true;
-                }
+            leader.GetComponent<CharacterManager>().kinematics.target *= (radius * 2f );
+            once = true;
                 
         }
-
-        foreach(CharacterManager boid in followers)
-        {
-            if((boid.gameObject.transform.position - destructBoid.transform.position).magnitude <= .3f)
-            {
-                removeBird(boid.gameObject);
-                break;
-            }
-        }
-
         
-        
+
+
+
     }
     public void removeBird(GameObject bird)
     {
@@ -257,21 +248,6 @@ public class ScalableFormationManager : MonoBehaviour {
         Destroy(bird);
         formation.numSlots -= 1;
     }
-    private bool roomForFormation()
-    {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(startLoc.position, formation.radius);
-        if (hits.Length != 0)
-        {
-            foreach(Collider2D hit in hits)
-            {
-                if(hit.name == "triangle")
-                {
-                    return false;
-                }
-            }
-            
-        }
-        return true;
-    }
+ 
 
 }

@@ -6,7 +6,11 @@ public class Kinematics : MonoBehaviour {
 
     public GameObject character;
     public Vector3 target;
-    public float maxSpeed; 
+    public float maxSpeed;
+    public float targetRadius;
+    public float slowRadius;
+    public float timeToTarget;
+    public float maxAcceleration;
 
     public struct KinematicSteeringOutput
     {
@@ -50,5 +54,48 @@ public class Kinematics : MonoBehaviour {
         steering.rotation = 0; 
         return steering; 
 
+    }
+
+    public KinematicSteeringOutput Arrive()
+    {
+        KinematicSteeringOutput steering = new KinematicSteeringOutput();
+
+        Vector3 direction = target - character.GetComponent<Character>().staticInfo.position;
+        float distance = direction.magnitude;
+
+        float targetSpeed;
+        if (distance < targetRadius)
+        {
+
+            steering.velocity = new Vector3(0, 0, 0);
+            return steering;
+        }
+
+        if (distance > slowRadius)
+        {
+            targetSpeed = maxSpeed;
+        }
+
+        else
+        {
+            targetSpeed = maxSpeed * distance / slowRadius;
+        }
+
+        Vector3 targetVelocity = direction;
+        targetVelocity.Normalize();
+        targetVelocity *= targetSpeed;
+
+        character.GetComponent<Character>().steering.linear = targetVelocity - character.GetComponent<Character>().staticInfo.velocity;
+        character.GetComponent<Character>().steering.linear /= timeToTarget;
+
+        if (character.GetComponent<Character>().steering.linear.magnitude > maxAcceleration)
+        {
+            character.GetComponent<Character>().steering.linear.Normalize();
+            character.GetComponent<Character>().steering.linear *= maxAcceleration;
+        }
+
+        character.GetComponent<Character>().steering.angular = 0;
+        steering.velocity = targetVelocity;
+        return steering;
     }
 }
