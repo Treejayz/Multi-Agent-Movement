@@ -1379,6 +1379,7 @@ MonoBehaviour:
   pastTunnel: {fileID: 847559020}
   wideTunnel: {fileID: 401353056}
   pastWideTunnel: {fileID: 1915551652}
+  destructBoid: {fileID: 1084831326}
 --- !u!4 &655867028
 Transform:
   m_ObjectHideFlags: 0
@@ -1568,6 +1569,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1084831326 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1965608668178194, guid: 77381f2941519f2469051cf07fc77dc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 439035252}
 --- !u!1 &1123133441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,7 +1907,7 @@ PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1181339184}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -2477,7 +2483,7 @@ PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1427003094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -2842,7 +2848,7 @@ PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1590348912}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -3708,7 +3714,7 @@ PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2110358261}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
