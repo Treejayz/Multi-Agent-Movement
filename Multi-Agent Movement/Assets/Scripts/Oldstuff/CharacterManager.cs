@@ -93,4 +93,10 @@ public class CharacterManager : MonoBehaviour {
         if ((character.staticInfo.position - kinematics.target).magnitude < .1) { kinematics.target = target; }
         if ((character.staticInfo.position - target).magnitude < .2 && leader) { path.updatePoint(); }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        GameObject.Find("FormationManager").GetComponent<ScalableFormationManager>().SendMessage("removeBird", this.gameObject);
+
+    }
 }

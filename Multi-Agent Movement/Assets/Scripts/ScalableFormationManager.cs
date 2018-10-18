@@ -14,6 +14,7 @@ public class ScalableFormationManager : MonoBehaviour {
     public GameObject pastTunnel;
     public GameObject wideTunnel;
     public GameObject pastWideTunnel;
+    public GameObject destructBoid;
     private bool once = false;
     private float maxSpeed;
     private int tunnelIndex = 0;
@@ -77,16 +78,19 @@ public class ScalableFormationManager : MonoBehaviour {
             {
                 boid.pause = true;
             }
-            if (followers.Length + 1 % 3 == 0)
+
+            if ((followers.Length + 1) % 3 == 0)
             {
+                
                 followers[0].kinematics.target = wideTunnel.transform.position;
                 followers[1].kinematics.target = wideTunnel.transform.position;
                 followers[0].pause = false;
                 followers[1].pause = false;
                 //tunnelIndex = 2;
             }
-            else
+            else if((followers.Length + 1) % 2 == 0)
             {
+                
                 followers[0].kinematics.target = wideTunnel.transform.position;
                 followers[0].pause = false;
                // tunnelIndex = 1;
@@ -98,7 +102,7 @@ public class ScalableFormationManager : MonoBehaviour {
             {
                 if((followers[tunnelIndex].transform.position - wideTunnel.transform.position).magnitude <= 1f)
                 {
-                    if(followers.Length + 1 % 3 == 0)
+                    if((followers.Length + 1) % 3 == 0)
                     {
                         if(tunnelIndex == 0)
                         {
@@ -114,7 +118,7 @@ public class ScalableFormationManager : MonoBehaviour {
                             }
                             
                         }
-                        else
+                        else if((followers.Length + 1) % 2 == 0)
                         {
                             tunnelIndex += 3;
                             if(tunnelIndex < followers.Length)
@@ -212,16 +216,60 @@ public class ScalableFormationManager : MonoBehaviour {
                 
         }
 
+        foreach(CharacterManager boid in followers)
+        {
+            if((boid.gameObject.transform.position - destructBoid.transform.position).magnitude <= .3f)
+            {
+                removeBird(boid.gameObject);
+                break;
+            }
+        }
+
         
         
     }
+    public void removeBird(GameObject bird)
+    {
+        if(bird == leader)
+        {
+            leader = followers[0].gameObject;
+            CharacterManager[] temp = new CharacterManager[followers.Length - 1]; 
+            for(int i = 1; i < followers.Length; i++)
+            {
+                temp[i - 1] = followers[i];
+            }
+            followers = temp;
+            leader.GetComponent<CharacterManager>().leader = true;
+            startLoc.SetParent(leader.transform);
+        }
+        else
+        {
+            CharacterManager[] temp = new CharacterManager[followers.Length - 1];
+            int j = 0;
+            for(int i = 0; i < followers.Length; i++)
+            {
 
+                if(followers[i].gameObject == bird) { continue; }
+                else { temp[j] = followers[i]; j++; }
+            }
+            followers = temp;
+        }
+        Destroy(bird);
+        formation.numSlots -= 1;
+    }
     private bool roomForFormation()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(startLoc.position, formation.radius);
         if (hits.Length != 0)
         {
-            return false;
+            foreach(Collider2D hit in hits)
+            {
+                if(hit.name == "triangle")
+                {
+                    return false;
+                }
+            }
+            
         }
         return true;
     }

@@ -46,6 +46,7 @@ public class Collision : MonoBehaviour {
     }
 	public Vector3 collisionTarget(Vector3 currentTarget)
     {
+
         Vector3 rayVector = character.staticInfo.velocity;
         rayVector.Normalize();
         rayVector *= lookAhead;
