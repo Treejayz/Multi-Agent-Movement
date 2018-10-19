@@ -61,6 +61,7 @@ public class Kinematics : MonoBehaviour {
         KinematicSteeringOutput steering = new KinematicSteeringOutput();
 
         Vector3 direction = target - character.GetComponent<Character>().staticInfo.position;
+        
         float distance = direction.magnitude;
 
         float targetSpeed;
@@ -82,8 +83,11 @@ public class Kinematics : MonoBehaviour {
         }
 
         Vector3 targetVelocity = direction;
+        
         targetVelocity.Normalize();
+        
         targetVelocity *= targetSpeed;
+      
 
         character.GetComponent<Character>().steering.linear = targetVelocity - character.GetComponent<Character>().staticInfo.velocity;
         character.GetComponent<Character>().steering.linear /= timeToTarget;
@@ -96,6 +100,8 @@ public class Kinematics : MonoBehaviour {
 
         character.GetComponent<Character>().steering.angular = 0;
         steering.velocity = targetVelocity;
+
+
         return steering;
     }
 }

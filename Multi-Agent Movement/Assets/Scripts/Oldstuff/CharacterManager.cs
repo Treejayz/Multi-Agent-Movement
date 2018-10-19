@@ -8,7 +8,7 @@ public class CharacterManager : MonoBehaviour {
     private Character character;
     public Kinematics kinematics;
     private Collision collision;
-    public Canvas canvas;
+    //public Canvas canvas;
     public Vector3 target;
     public string mode;
     public float rotation;
@@ -30,7 +30,7 @@ public class CharacterManager : MonoBehaviour {
     // Update is called once per frame
     public void setUp(Vector3 _target)
     {
-        canvas.enabled = false;
+        //canvas.enabled = false;
         target = _target;
         if (leader)
         {
@@ -70,7 +70,7 @@ public class CharacterManager : MonoBehaviour {
         }
         else
         {
-            canvas.enabled = true;
+            //canvas.enabled = true;
         }
         
         
@@ -85,11 +85,11 @@ public class CharacterManager : MonoBehaviour {
         
   
         Kinematics.KinematicSteeringOutput steering = kinematics.Seek();
-        /*if (mode == "arrive")
+        if (mode == "arrive")
         {
             steering = kinematics.Arrive();
         }
-        */
+        
         character.staticInfo.velocity = steering.velocity;
         character.updateSteering(Time.deltaTime);
 
@@ -97,7 +97,7 @@ public class CharacterManager : MonoBehaviour {
         this.transform.rotation = Quaternion.Euler(0, 0, character.staticInfo.orientation * Mathf.Rad2Deg);
 
         
-        if ((character.staticInfo.position - kinematics.target).magnitude < .3) { kinematics.target = target; }
+        if ((character.staticInfo.position - kinematics.target).magnitude < .2) { kinematics.target = target; }
         if ((character.staticInfo.position - target).magnitude < .2 && leader) { path.updatePoint(); }
     }
 
