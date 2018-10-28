@@ -23,6 +23,8 @@ public class TwoLevelFormation : MonoBehaviour {
         {
             velocity = velocity.normalized * 3.5f;
         }
+        float rot_z = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
         transform.position += (Vector3)velocity * Time.deltaTime;
     }
 

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 50298584768784704}
   - component: {fileID: 60529857119737320}
   - component: {fileID: 114167581068537304}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: TwoLevelBoid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,10 @@ MonoBehaviour:
   slot: 0
   target: {fileID: 0}
   offset: {x: 0, y: 0}
+  velocity: {x: 0, y: 0}
+  collisionlayer:
+    serializedVersion: 2
+    m_Bits: 39
 --- !u!212 &212195299817805534
 SpriteRenderer:
   m_ObjectHideFlags: 1

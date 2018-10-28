@@ -72,7 +72,7 @@ public class TwoLevelManager : MonoBehaviour {
         Vector2 target = path[index].position;
         if (index < path.Length - 1 && Vector2.Distance(path[index].position, transform.position) < 0.3f)
         {
-            if (anchorPos.magnitude < 0.3f)
+            if (anchorPos.magnitude < 1f)
             {
                 index += 1;
                 target = path[index].position;
